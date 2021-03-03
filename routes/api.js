@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const User = require("../schemas/user");
 const Order = require("../schemas/order");
 const Product = require("../schemas/product");
@@ -115,7 +115,7 @@ router.post("/login", async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    const auth = await bcrypt.compare(pw, user.password);
+    const auth = await bcryptjs.compareSync(pw, user.password);
     if (auth) {
       let payload = {
         subject: user._id,

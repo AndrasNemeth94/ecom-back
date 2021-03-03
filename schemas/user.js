@@ -1,5 +1,5 @@
 let mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 
 let userSchema = new mongoose.Schema({
   email: String,
@@ -10,8 +10,8 @@ let userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
+  const salt = await bcryptjs.genSalt(10);
+  this.password = await bcryptjs.hashSync(this.password, salt);
   next();
 });
 module.exports = mongoose.model("user", userSchema, "users");
